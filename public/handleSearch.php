@@ -10,7 +10,7 @@ $query = $data['search'] ?? '';
 
 if ($query === '') {
     $products = $productModel->getAll();
-} else {
+}else {
     $stmt = $pdo->prepare("SELECT * FROM Product WHERE name LIKE ?");
     $stmt->execute(["%$query%"]);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
