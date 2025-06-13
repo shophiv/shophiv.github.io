@@ -31,9 +31,9 @@
         </div>
         <ul class="nav flex-column">
             <li onclick="location.href='../views/sellerDashboard.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Dashboard</li>
-            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">My Products</li>
+            <li onclick="location.href='../views/myProducts.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">My Products</li>
             <li onclick="location.href='../public/index.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Product Catalog</li>
-            <li onclick="location.href='../views/buyerDashboard.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Orders</li>
+            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Orders</li>
             <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Settings</li>
             <li onclick="location.href='../controllers/switchToBuyer.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Become a Buyer</li>
         </ul>
@@ -67,7 +67,8 @@
             <div class="row g-3 d-flex justify-content-center">
                 <div class="col-md-3">
                     <div class="p-3 text-center rounded" style="background-color: #e6ffe6;">
-                        <h3 class="text-success">25</h3>
+                        <?php $count = $productModel->getCountBySellerId($user['seller_id']); ?>
+                        <h3 class="text-success"><?php echo $count; ?></h3>
                         <p class="text-muted">Total Products</p>
                     </div>
                 </div>
@@ -101,7 +102,6 @@
                     <th>Category</th>
                     <th>Price</th>
                     <th>Stock</th>
-                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -111,10 +111,6 @@
                     <td><?= htmlspecialchars($product['category']) ?></td>
                     <td>$<?= number_format($product['price'], 2) ?></td>
                     <td><?php echo($product['stock']) ?></td>
-                    <td>
-                        <button class="btn btn-outline-success btn-md">View</button>
-                        <button class="btn btn-outline-secondary btn-md">Edit</button>
-                    </td>
                 </tr>
                 <?php endforeach; ?>
                 </tbody>
