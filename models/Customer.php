@@ -13,9 +13,9 @@ class Customer {
         return ($user) ? $user : false;
     }
 
-    public function register($firstname, $lastname, $email, $password) {
-        $stmt = $this->pdo->prepare("INSERT INTO Customer (firstname, lastname, email, password) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT)]);
+    public function register($firstname, $lastname, $email, $password, $phone) {
+        $stmt = $this->pdo->prepare("INSERT INTO Customer (firstname, lastname, email, password, phone) VALUES (?, ?, ?, ?, ?)");
+        return $stmt->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT), $phone]);
     }
 
     public function login($email, $password) {
@@ -23,6 +23,13 @@ class Customer {
         $stmt->execute([$email]);
         $user = $stmt->fetch();
         return ($user && password_verify($password, $user['password'])) ? $user : false;
+    }
+
+    public function updateCustomer($id, $firstname, $lastname, $email, $password, $phone, $street,$city, $state){
+            $stmt = $this->pdo->prepare(
+                "UPDATE customer SET firstname = ?, lastname = ?, email = ?, password = ?, phone = ?, street = ?, city = ?, state = ? WHERE customer_id = ?"
+            );
+            return $stmt->execute([$firstname, $lastname, $email, password_hash($password, PASSWORD_DEFAULT),$phone, $street, $city, $state, $id]);
     }
 }
 ?>

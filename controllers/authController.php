@@ -9,7 +9,7 @@ $seller = new Seller($pdo);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['register'])) {
-        $customer->register($_POST['fname'], $_POST['lname'], $_POST['email'], $_POST['password']);
+        $customer->register($_POST['fname'], $_POST['lname'], $_POST['email'], $_POST['password'], $_POST['phone']);
         header("Location: ../views/login.php");
     }
 
@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user) {
             session_start();
             $_SESSION['user'] = $user;
+
             $_SESSION['role'] = 'buyer';
             header("Location: ../views/buyerDashboard.php");
         } else {
