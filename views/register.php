@@ -16,6 +16,9 @@
         <input class="form-control" type="email" name="email" placeholder="Email" required />
     </div>
     <div class="mb-3">
+            <input class="form-control" type="tel" name="phone" placeholder="Phone Number" required />
+    </div>
+    <div class="mb-3">
         <input class="form-control" type="password" name="password" placeholder="Password" required />
     </div>
     <button class="btn btn-primary" type="submit" name="register">Register</button>

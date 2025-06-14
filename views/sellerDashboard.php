@@ -33,8 +33,8 @@
             <li onclick="location.href='../views/sellerDashboard.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Dashboard</li>
             <li onclick="location.href='../views/myProducts.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">My Products</li>
             <li onclick="location.href='../public/index.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Product Catalog</li>
-            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Orders</li>
-            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Settings</li>
+            <li onclick="location.href='../views/buyerDashboard.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Orders</li>
+            <li onclick="location.href='../views/settings.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Settings</li>
             <li onclick="location.href='../controllers/switchToBuyer.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Become a Buyer</li>
         </ul>
     </div>
@@ -55,10 +55,6 @@
             <div class="p-3 rounded" style="background-color: #e6ffe6;">
                 <h2 class="h5">Welcome, <span class="text-success"><?php echo($user['firstname'])?></span>!</h2>
                 <p class="text-muted">Here's an overview of your store performance today.</p>
-                <div class="input-group mt-3">
-                    <input type="text" class="form-control" placeholder="Search products">
-                    <button class="btn btn-success">Search</button>
-                </div>
             </div>
         </section>
 

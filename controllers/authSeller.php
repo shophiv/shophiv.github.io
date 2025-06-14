@@ -9,7 +9,7 @@ $user = $_SESSION['user'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['registerAsSeller'])) {
-        $seller->register($_POST['fname'], $_POST['lname'], $_POST['email'], $_POST['password'], $user['customer_id']);
+        $seller->register($_POST['fname'], $_POST['lname'], $_POST['email'], $_POST['password'], $user['customer_id'], $_POST['phone']);
         header("Location: ../views/sellerDashboard.php");
     }
 }

@@ -57,12 +57,23 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
                 </script>
             </header>
 
+            <section class="mb-4">
+            <div class="p-3 rounded" style="background-color: #e6ffe6;">
+                <div class="input-group mt-3">
+                    <input oninput="searchProducts(this.value)" name="sellerProducts" type="text" class="form-control" placeholder="Search products">
+                    <button class="btn btn-success" >Search</button>
+                </div>
+            </div>
+            </section>
+
+
+
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h5 text-success">Product List</h2>
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal" onclick="openAddModal()">Add Product</button>
             </div>
 
-            <table class="table table-bordered table-hover">
+            <table id="productTable" class="table table-bordered table-hover">
                 <thead style="background-color:#d0f0c0">
                     <tr>
                         <th>Name</th>
@@ -73,7 +84,7 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="productTableBody">
                     <?php foreach ($products as $p): ?>
                         <tr>
                             <td><?= htmlspecialchars($p['name']) ?></td>
@@ -126,9 +137,9 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         function openAddModal() {
-            document.getElementById('productModalLabel').textContent = 'Add Product';
-            ['product_id', 'product_name', 'product_desc', 'product_price', 'product_stock'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('product_cat').value = '';
+                    document.getElementById('productModalLabel').textContent = 'Add';
+                    ['product_id', 'product_name', 'product_desc', 'product_price', 'product_stock'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('product_cat').value = '';
         }
 
         function openEditModal(prod) {
@@ -155,6 +166,20 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
             document.body.appendChild(form);
             form.submit();
         }
+
+
+        function searchProducts(query) {
+            const rows = document.querySelectorAll("#productTableBody tr");
+            const lowerQuery = query.toLowerCase();
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("td");
+                const rowText = Array.from(cells).map(td => td.textContent.toLowerCase()).join(" ");
+                row.style.display = rowText.includes(lowerQuery) ? "" : "none";
+            });
+        }
+
+
     </script>
 
 </body>

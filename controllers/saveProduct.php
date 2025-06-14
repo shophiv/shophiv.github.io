@@ -2,7 +2,6 @@
 require_once '../config/db.php';
 require_once '../models/Product.php';
 session_start();
-
 $productModel = new Product($pdo);
 $data = $_POST;
 $sellerId = $_SESSION['user']['seller_id'];
