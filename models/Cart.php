@@ -74,7 +74,7 @@ class Cart
    {
       $stmt = $this->pdo->prepare("
             SELECT ci.cart_item_id, ci.product_id, ci.quantity, 
-                   p.name, p.description, p.price, p.stock
+                   p.name, p.description, p.price, p.stock, p.seller_id
             FROM CartItem ci
             JOIN Product p ON ci.product_id = p.product_id
             WHERE ci.cart_id = ?
