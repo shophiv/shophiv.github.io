@@ -28,9 +28,9 @@ $user = $_SESSION['user'];
         <ul class="nav flex-column">
             <li onclick="location.href='../controllers/sessionHandle.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Dashboard</li>
             <li onclick="location.href='../public/index.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Product Catalog</li>
-            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">My Orders</li>
-            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Cart</li>
-            <li style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Settings</li>
+            <li onclick="location.href='./orders.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">My Orders</li>
+            <li onclick="location.href='./cart.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Cart</li>
+            <li onclick="location.href='../views/settings.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Settings</li>
         </ul>
     </div>
 
@@ -65,7 +65,14 @@ $user = $_SESSION['user'];
                             <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
                             <p class="card-text"><?= htmlspecialchars($product['description']) ?></p>
                             <p class="card-text">$<?= number_format($product['price'], 2) ?></p>
-                            <a href="#" class="btn btn-success">Add to Cart</a>
+
+                            <form action="../controllers/Cart/addToCart.php" method="POST" class="mt-2">
+                                  <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']) ?>">
+                                  <div class="input-group mb-2">
+                                       <button type="submit" class="btn btn-success">Add to Cart</button>
+                                       <input type="number" name="quantity" value="1" min="1" max="<?= htmlspecialchars($product['stock']) ?>" class="form-control" style="max-width: 80px;">
+                                  </div>
+                            </form>
                         </div>
                     </div>
                 </div>
