@@ -39,13 +39,27 @@ foreach ($items as $item) {
 $order_id = $orderModel->createOrder($customer_id, $total);
 
 // Add order items
+$totalItems = $cartModel->getTotalCartItemsCount($customer_id);
+$count = 0;
 foreach ($items as $item) {
-    $orderModel->addOrderItem($order_id, $item['product_id'], $item['seller_id'], $item['price'], $item['quantity']);
+    if (
+        $orderModel->addOrderItem($order_id, $item['product_id'], $item['seller_id'], $item['price'], $item['quantity'])==false
+    ) {
+        $count++;
+    } else {
+        // Clear cart
+        $cartModel->clearCart($cart['cart_id'], $item['product_id']);
+    }
 }
 
-// Clear cart
-$cartModel->clearCart($cart['cart_id']);
-
-$_SESSION['message'] = "Order placed successfully!";
+if ($count == 0) {
+    $_SESSION['message'] = "Order placed successfully!";
+}
+elseif($count==$totalItems){
+    $_SESSION['message'] = "Order cannot be placed, All the items are out of stock!";
+}
+else{
+    $_SESSION['message'] = "Order placed but some items are out of stock so they are not included!";
+}
 header("Location: ../../public/orders.php");  // Create orders.php to view order history
 exit;

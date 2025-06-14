@@ -65,6 +65,7 @@ $user = $_SESSION['user'];
                             <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
                             <p class="card-text"><?= htmlspecialchars($product['description']) ?></p>
                             <p class="card-text">$<?= number_format($product['price'], 2) ?></p>
+                             <p class="card-text">Stock: <?= number_format($product['stock'], 2) ?></p>
 
                             <form action="../controllers/Cart/addToCart.php" method="POST" class="mt-2">
                                 <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']) ?>">

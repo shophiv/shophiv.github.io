@@ -18,8 +18,20 @@ class Cart
       $stmt->execute([$customer_id]);
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
    }
+   public function getTotalCartItemsCount($customer_id)
+   {
+      $stmt = $this->pdo->prepare("
+        SELECT COUNT(*) as total
+        FROM CartItem ci
+        JOIN Cart c ON ci.cart_id = c.cart_id
+        WHERE c.customer_id = ?
+    ");
+      $stmt->execute([$customer_id]);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+      return $result?(int)$result['total'] : 0;
+   }
+   
    public function addToCart($customer_id, $product_id, $quantity)
    {
       $cart_id = $this->getOrCreateCart($customer_id);
@@ -84,10 +96,10 @@ class Cart
    }
 
    // Clear cart (delete all CartItems) by cart_id
-   public function clearCart($cart_id)
+   public function clearCart($cart_id, $product_id)
    {
-      $stmt = $this->pdo->prepare("DELETE FROM CartItem WHERE cart_id = ?");
-      return $stmt->execute([$cart_id]);
+      $stmt = $this->pdo->prepare("DELETE FROM CartItem WHERE cart_id = ? AND product_id=?");
+      return $stmt->execute([$cart_id, $product_id]);
    }
 
    public function removeItem($cart_item_id)
