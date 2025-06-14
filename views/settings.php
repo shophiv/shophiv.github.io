@@ -64,7 +64,7 @@ $user = $_SESSION['user'];
                             <h4><strong>Role: </strong> <?= htmlspecialchars($_SESSION['role'] ?? 'Not specified') ?></h4>
                             <h4><strong>Phone: </strong> <?= htmlspecialchars($user['phone'] ?? '???') ?></h4>
                             <h4><strong>Street:</strong> <?= htmlspecialchars($user['street'] ?? '???') ?></h4>
-                            <h4><strong>City:</strong> <?= htmlspecialchars($user['City'] ?? '???') ?></h4>
+                            <h4><strong>City:</strong> <?= htmlspecialchars($user['city'] ?? '???') ?></h4>
                             <h4><strong>State:</strong> <?= htmlspecialchars($user['state'] ?? '???') ?></h4>
 
                             <div class="text-end mt-4">
