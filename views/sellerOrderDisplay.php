@@ -1,12 +1,14 @@
 <?php
 require_once '../config/db.php';
+require_once '../models/Order.php';
 require_once '../models/Product.php';
 session_start();
 
 $user = $_SESSION['user'];
+$orderModel = new Order($pdo);
+$orderItems = $orderModel->getSellerOrderItems($user['seller_id']);
 $productModel = new Product($pdo);
-$products = $productModel->getBySellerId($user['seller_id']);
-$categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +49,7 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
         <div class="flex-grow-1 p-4">
             <header class="d-flex justify-content-between align-items-center mb-4">
                 <img src="../public/logo.png" class="rounded-circle" style="width:70px;height:70px">
-                <h1 class="h4 text-success">My Products</h1>
+                <h1 class="h4 text-success">Orders</h1>
                 <p class="text-muted mb-0" id="currentDate"></p>
                 <script>
                     const now = new Date();
@@ -59,7 +61,7 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
             <section class="mb-4">
             <div class="p-3 rounded" style="background-color: #e6ffe6;">
                 <div class="input-group mt-3">
-                    <input oninput="searchProducts(this.value)" name="sellerProducts" type="text" class="form-control" placeholder="Search products">
+                    <input oninput="searchProducts(this.value)" name="sellerProducts" type="text" class="form-control" placeholder="Search Orders">
                     <button class="btn btn-success" >Search</button>
                 </div>
             </div>
@@ -68,33 +70,24 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
 
 
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="h5 text-success">Product List</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal" onclick="openAddModal()">Add Product</button>
+                <h2 class="h5 text-success">Order List</h2>
             </div>
 
-            <table id="productTable" class="table table-bordered table-hover">
+<table id="productTable" class="table table-bordered table-hover">
                 <thead style="background-color:#d0f0c0">
                     <tr>
                         <th>Name</th>
-                        <th>Desc</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Actions</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
                     </tr>
                 </thead>
                 <tbody id="productTableBody">
-                    <?php foreach ($products as $p): ?>
+                    <?php foreach ($orderItems as $i): ?>
                         <tr>
-                            <td><?= htmlspecialchars($p['name']) ?></td>
-                            <td><?= htmlspecialchars($p['description']) ?></td>
-                            <td><?= htmlspecialchars($p['category']) ?></td>
-                            <td>$<?= number_format($p['price'], 2) ?></td>
-                            <td><?= $p['stock'] ?></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-secondary" onclick='openEditModal(<?= json_encode($p) ?>)'>Edit</button>
-                                <button class="btn btn-sm btn-outline-danger" onclick='deleteProduct(<?= $p['product_id'] ?>)'>Delete</button>
-                            </td>
+                            <?php $p = $productModel->getByProductId($i['product_id']);?>
+                            <td><?php echo($p['name']) ?></td>
+                            <td><?= htmlspecialchars($i['quantity']) ?></td>
+                            <td>$<?= number_format($i['unit_price'], 2) ?></td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
@@ -102,70 +95,7 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
         </div>
     </div>
 
-    <!-- Add/Edit Modal -->
-    <div class="modal fade" id="productModal" tabindex="-1">
-        <div class="modal-dialog">
-            <form method="POST" action="../controllers/saveProduct.php" class="modal-content">
-                <div class="modal-header" style="background-color:#d0f0c0">
-                    <h5 class="modal-title text-success" id="productModalLabel">Add Product</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="product_id" id="product_id">
-                    <div class="mb-3"><label class="form-label">Name</label><input id="product_name" name="name" class="form-control" required></div>
-                    <div class="mb-3"><label class="form-label">Description</label><textarea id="product_desc" name="description" class="form-control" required></textarea></div>
-                    <div class="mb-3"><label class="form-label">Category</label>
-                        <select id="product_cat" name="category" class="form-select" required>
-                            <option value="">Select category</option>
-                            <?php foreach ($categories as $c): ?>
-                                <option><?= htmlspecialchars($c) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3"><label class="form-label">Price ($)</label><input type="number" step="0.01" id="product_price" name="price" class="form-control" required></div>
-                    <div class="mb-3"><label class="form-label">Stock</label><input type="number" id="product_stock" name="stock" class="form-control" required></div>
-                </div>
-                <div class="modal-footer" style="background-color:#fdf8df">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function openAddModal() {
-                    document.getElementById('productModalLabel').textContent = 'Add';
-                    ['product_id', 'product_name', 'product_desc', 'product_price', 'product_stock'].forEach(id => document.getElementById(id).value = '');
-                    document.getElementById('product_cat').value = '';
-        }
-
-        function openEditModal(prod) {
-            document.getElementById('productModalLabel').textContent = 'Edit Product';
-            document.getElementById('product_id').value = prod.product_id;
-            document.getElementById('product_name').value = prod.name;
-            document.getElementById('product_desc').value = prod.description;
-            document.getElementById('product_price').value = prod.price;
-            document.getElementById('product_stock').value = prod.stock;
-            document.getElementById('product_cat').value = prod.category;
-            new bootstrap.Modal(document.getElementById('productModal')).show();
-        }
-
-        function deleteProduct(id) {
-            if (!confirm('Delete this product?')) return;
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '../controllers/saveProduct.php';
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'delete_id';
-            input.value = id;
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-        }
-
 
         function searchProducts(query) {
             const rows = document.querySelectorAll("#productTableBody tr");
@@ -177,10 +107,6 @@ $categories = ['Electronics', 'Books', 'Clothing', 'Home', 'Beauty'];
                 row.style.display = rowText.includes(lowerQuery) ? "" : "none";
             });
         }
-
-
     </script>
-
 </body>
-
 </html>
