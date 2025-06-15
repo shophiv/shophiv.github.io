@@ -33,7 +33,7 @@ $user = $_SESSION['user'] ?? null;
       <p><strong>Price:</strong> $<?= number_format($product['price'], 2) ?></p>
       <p><strong>Stock:</strong> <?= $product['stock'] ?></p>
 
-      <a href="index.php" class="btn btn-secondary mb-4">Back to Catalog</a>
+      <a href="../public/index.php" class="btn btn-secondary mb-4">Back to Catalog</a>
 
       <!-- Existing Reviews -->
       <h3>Customer Reviews</h3>
