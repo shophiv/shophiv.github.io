@@ -36,6 +36,15 @@ class Product
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
+
+    public function getByProductId($id){
+            $stmt = $this->pdo->prepare("SELECT * FROM Product WHERE product_id = ?");
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+    }
+
+
+
     public function getCountBySellerId($id)
     {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM Product WHERE seller_id = ?");

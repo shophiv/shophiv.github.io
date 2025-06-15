@@ -79,4 +79,16 @@ class Order
       $stmt->execute([$order_id]);
       return $stmt->fetchAll(PDO::FETCH_ASSOC);
    }
+
+    public function getSellerOrderItems($id){
+      $stmt = $this->pdo->prepare("
+        SELECT * FROM `orderitem`
+        WHERE seller_id = ?
+        ORDER BY order_item_id
+      ");
+      $stmt->execute([$id]);
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+   }
+
 }
+?>
