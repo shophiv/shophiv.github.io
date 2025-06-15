@@ -1,9 +1,11 @@
 <?php
 require_once '../config/db.php';
 require_once '../models/Product.php';
+require_once '../models/Review.php';
 session_start();
 
 $productModel = new Product($pdo);
+$reviewModel = new Review($pdo); 
 $products = $productModel->getAll();
 $user = $_SESSION['user'];
 ?>
@@ -58,7 +60,11 @@ $user = $_SESSION['user'];
         </section>
 
         <div class="row" id="productList">
-            <?php foreach ($products as $product): ?>
+            <?php foreach ($products as $product): 
+                // Get average rating and review count for this product:
+                $avgRating = $reviewModel->getAverageRating($product['product_id']);
+                $reviewCount = $reviewModel->getReviewCount($product['product_id']);
+            ?>
                 <div class="col-md-4">
                     <div class="card mb-4">
                         <div class="card-body">
@@ -66,7 +72,19 @@ $user = $_SESSION['user'];
                             <p class="card-text"><?= htmlspecialchars($product['description']) ?></p>
                             <p class="card-text">$<?= number_format($product['price'], 2) ?></p>
                              <p class="card-text">Stock: <?= number_format($product['stock'], 2) ?></p>
-
+                            
+                            <!--  Reviews Summary -->
+                            <div class="mb-2">
+                                <?php if ($reviewCount > 0): ?>
+                                    <span class="text-warning">
+                                        <?= str_repeat('★', round($avgRating)) ?><?= str_repeat('☆', 5 - round($avgRating)) ?>
+                                    </span>
+                                    <small class="text-muted">(<?= $reviewCount ?> review<?= $reviewCount > 1 ? 's' : '' ?>)</small>
+                                <?php else: ?>
+                                    <small class="text-muted">No reviews yet</small>
+                                <?php endif; ?>
+                            </div>
+                            
                             <form action="../controllers/Cart/addToCart.php" method="POST" class="mt-2">
                                 <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']) ?>">
                                 <div class="input-group mb-2">
@@ -74,6 +92,7 @@ $user = $_SESSION['user'];
                                     <input type="number" name="quantity" value="1" min="1" max="<?= htmlspecialchars($product['stock']) ?>" class="form-control" style="max-width: 80px;">
                                 </div>
                             </form>
+                            <a href="../views/productDetails.php?id=<?= $product['product_id'] ?>" class="btn btn-outline-secondary btn-sm">View Details</a>
                         </div>
                     </div>
                 </div>
@@ -115,6 +134,29 @@ function searchProducts(query) {
         });
     });
 }
+
+function loadReviews(productId) {
+    fetch('../public/handleReviews.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'product_id=' + productId
+    })
+    .then(res => res.json())
+    .then(data => {
+        const container = document.getElementById("reviewList");
+        container.innerHTML = data.length ? "" : "<p class='text-muted'>No reviews yet.</p>";
+        data.forEach(review => {
+            container.innerHTML += `
+                <div class="border p-2 mb-2 rounded">
+                    <strong>${review.firstname} ${review.lastname}</strong> - Rated: ${review.rating}/5 <br>
+                    <small class="text-muted">${review.review_date}</small>
+                    <p>${review.comments}</p>
+                </div>`;
+        });
+    });
+}
+
+
 </script>
 </body>
 </html>
