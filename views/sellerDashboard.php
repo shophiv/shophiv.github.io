@@ -36,7 +36,6 @@ $products = $productModel->getBySellerId($user['seller_id']);
             <ul class="nav flex-column">
                 <li onclick="location.href='../views/sellerDashboard.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Dashboard</li>
                 <li onclick="location.href='../views/myProducts.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">My Products</li>
-                <li onclick="location.href='../public/index.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Product Catalog</li>
                 <li onclick="location.href='../views/sellerOrderDisplay.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Orders</li>
                 <li onclick="location.href='../views/settings.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Settings</li>
                 <li onclick="location.href='../controllers/switchToBuyer.php'" style="margin-bottom: 10px;padding: 10px;background-color: #d0f0c0; border-radius: 5px" class="nav-item btn btn-light mb-2">Become a Buyer</li>
@@ -81,12 +80,12 @@ $products = $productModel->getBySellerId($user['seller_id']);
                             <p class="text-muted">Total Orders</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <div class="p-3 text-center rounded" style="background-color: #e6ffe6;">
                             <h3 class="text-success">$4,500</h3>
                             <p class="text-muted">Monthly Sales</p>
                         </div>
-                    </div>
+                    </div> -->
                     <!--                <div class="col-md-3">-->
                     <!--                    <div class="p-3 text-center rounded" style="background-color: #e6ffe6;">-->
                     <!--                        <h3 class="text-success">4.8</h3>-->
