@@ -49,4 +49,11 @@ class Product
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
+
+    public function getById($product_id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM Product WHERE product_id = ?");
+        $stmt->execute([$product_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
